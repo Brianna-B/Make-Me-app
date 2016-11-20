@@ -1,0 +1,5 @@
+e:\steve\documents\visual studio 2015\Projects\Hackathon\Hackathon.Core\bin\Debug\Hackathon.Core.dll
+e:\steve\documents\visual studio 2015\Projects\Hackathon\Hackathon.Core\bin\Debug\Hackathon.Core.pdb
+e:\steve\documents\visual studio 2015\Projects\Hackathon\Hackathon.Core\obj\Debug\Hackathon.Core.csprojResolveAssemblyReference.cache
+e:\steve\documents\visual studio 2015\Projects\Hackathon\Hackathon.Core\obj\Debug\Hackathon.Core.dll
+e:\steve\documents\visual studio 2015\Projects\Hackathon\Hackathon.Core\obj\Debug\Hackathon.Core.pdb
