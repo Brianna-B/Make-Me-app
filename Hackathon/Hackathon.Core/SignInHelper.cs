@@ -10,6 +10,7 @@ namespace Hackathon.Core
     {
         public string username;
         private string password;
+        List<UserInfo> Users;
 
         public bool isValidEntry()
         {
@@ -23,20 +24,41 @@ namespace Hackathon.Core
 
         public bool isValidateUsername()
         {
-            //check database for existing username
-            return true;
+            if (Users.Find(x => x.userName == username) == null)
+            {
+                return false;
+            }
+                return true;
         }
 
         public bool isValidPassword()
         {
-            //if username exists, match the password
-            return true;
+            UserInfo getPass = Users.Find(x => x.userName == username);
+            
+            if (getPass == null)
+            {
+                return false;
+            }
+
+            else
+            {
+                if (getPass.password != password)
+                {
+                    return false;
+                }
+
+                else
+                {
+                    return true;
+                }
+            }
         }
 
-        public SignInHelper(string user, string pass)
+        public SignInHelper(string user, string pass, List<UserInfo> users)
         {
             username = user;
             password = pass;
+            Users = users;
         }
     }
 }

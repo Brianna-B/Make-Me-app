@@ -6,17 +6,22 @@ using System.Threading.Tasks;
 
 namespace Hackathon.Core
 {
-    class UserInfo
+    public class UserInfo
     {
         public string email;
         public string userName;
-        public string password;
+        public string password; 
 
         public UserInfo(string email, string userName, string password)
         {
             this.email = email;
             this.userName = userName;
             this.password = password;
+        }
+
+        public string Export()
+        {
+            return email + " " + userName + " " + password;
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hackathon"
         mc:Ignorable="d"
-        Title="Make Me!" Height="720" Width="1280" MinHeight="500" MinWidth="700" HorizontalAlignment="Center" VerticalAlignment="Center">
+        Title="Make Me!" Height="720" Width="1280" MinHeight="500" MinWidth="700" HorizontalAlignment="Center" VerticalAlignment="Center" Closing="onClosing">
     <Grid>
         <DockPanel LastChildFill="True">
             <Grid DockPanel.Dock="Left">
@@ -45,7 +45,7 @@
                             <Label x:Name="password" Content="Password:"/>
                         </StackPanel>
                         <StackPanel Height="auto" Width="auto">
-                            <TextBox x:Name="usernameBox" Width="100" Margin="5"/>
+                            <TextBox x:Name="usernameBox" Width="100" Margin="5" KeyDown="onTextInput"/>
                             <PasswordBox x:Name="passwordBox" Width="100" Margin="5" KeyDown="onPasswordEnter"/>
                         </StackPanel>
                     </StackPanel>
@@ -82,7 +82,7 @@
                 
 
                 <!--  -->
-
+                <!-- Create Account Page -->
                 <StackPanel x:Name="createPanel" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
                     <Label Content="Create New Account" HorizontalAlignment="Center" FontSize="24"/>
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="auto" Width="auto" Orientation="Horizontal">
@@ -93,10 +93,10 @@
                             <Label x:Name="email" Content="Email:"/>
                         </StackPanel>
                         <StackPanel Height="auto" Width="auto">
-                            <TextBox x:Name="createUserBox" Width="200" Margin="5"/>
-                            <PasswordBox x:Name="createPassBox" Width="200" Margin="5"/>
-                            <PasswordBox x:Name="confirmPassBox" Width="200" Margin="5" />
-                            <TextBox x:Name="emailBox" Width="200" Margin="5" />
+                            <TextBox x:Name="createUserBox" Width="200" Margin="5" KeyDown="onTextInput"/>
+                            <PasswordBox x:Name="createPassBox" Width="200" Margin="5" KeyDown="onTextInput"/>
+                            <PasswordBox x:Name="confirmPassBox" Width="200" Margin="5" KeyDown="onTextInput"/>
+                            <TextBox x:Name="emailBox" Width="200" Margin="5" KeyDown="onTextInput"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

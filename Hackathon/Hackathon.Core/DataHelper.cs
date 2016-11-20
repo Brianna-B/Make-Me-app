@@ -6,30 +6,32 @@ using System.Threading.Tasks;
 
 namespace Hackathon.Core
 {
-    public enum TileList
-    {
-        Featured,
-        Laugh,
-        Smile,
-        Aww,
-        Hungry
-    }
-
-    class DataHelper
+    public class DataHelper
     {
         public List<UserInfo> Users;
-        //public List<ImageData> Images;
+        public List<string> Images;
 
         public List<Tile> Tiles;
 
-        public void LoadTiles(TileList type)
+        public DataHelper()
         {
+            Users = new List<UserInfo>();
+            Tiles = new List<Tile>();
+            Images = new List<string>();
 
-            Tiles.Add(new Tile("art.jpg", "steve", 0));
-            Tiles.Add(new Tile("art2.jpg", "steve", 0));
-            Tiles.Add(new Tile("guy_fieri.jpg", "maggie", 0));
-            Tiles.Add(new Tile("forest.jpg", "maggie", 0));
-            Tiles.Add(new Tile("house.jpg", "maggie", 0));
+            Images.Add("forest.jpg");
+            Images.Add("house.jpg");
+            Images.Add("art.jpg");
+            Images.Add("art2.jpg");
+            Images.Add("guy_fieri.jpg");
+        }
+
+        public void LoadTiles(TileType type)
+        {
+            foreach(var path in Images)
+            {
+                Tiles.Add(new Tile(path, "", 0));
+            }
         }
     }
 }

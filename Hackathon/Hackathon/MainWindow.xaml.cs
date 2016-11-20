@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Hackathon.Core;
+using System.IO;
 
 namespace Hackathon
 {
@@ -21,18 +22,16 @@ namespace Hackathon
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Tile> FeaturedTiles;
-        List<Tile> LaughTiles;
-        List<Tile> SmileTiles;
-        List<Tile> AwwTiles;
-        List<Tile> HungryTiles;
-        bool isSignedIn = false;
+        DataHelper Data = new DataHelper();
         SignInHelper signInHelper;
+        bool isSignedIn = false;
+        CreateAccountHelper accountHelper;
 
         public MainWindow()
         {
             InitializeComponent();
-            LoadTiles(FeaturedTiles);
+            Import();
+            Data.LoadTiles(TileType.Featured);
             BuildTiles();
         }
 
@@ -44,7 +43,7 @@ namespace Hackathon
 
             var likeButtonImage = new BitmapImage(new Uri("heart_icon_white.png", UriKind.RelativeOrAbsolute));
 
-            foreach (var tile in Tiles)
+            foreach (var tile in Data.Tiles)
             {
                 var stack = new StackPanel();
                 var image = new Image();
@@ -98,11 +97,11 @@ namespace Hackathon
             CollapseAll();
             loginPanel.Visibility = Visibility.Visible;
         }
-
+        ///*********************************************************************************/
         private void onConfirmLoginButtonClick(object sender, EventArgs e)
         {
             // Authenticate
-            signInHelper = new SignInHelper(usernameBox.Text, passwordBox.Password);
+            signInHelper = new SignInHelper(usernameBox.Text, passwordBox.Password, Data.Users);
             if (!signInHelper.isValidEntry())
             {
                 usernameBox.Clear();
@@ -174,15 +173,15 @@ namespace Hackathon
 
             tileNum = int.Parse(tile.Name.Substring(4));
 
-            if (Tiles[tileNum].isLiked)
+            if (Data.Tiles[tileNum].isLiked)
             {
                 button.Source = new BitmapImage(new Uri("heart_icon_white.png", UriKind.Relative));
-                Tiles[tileNum].isLiked = false;
+                Data.Tiles[tileNum].isLiked = false;
             }
             else
             {
                 button.Source = new BitmapImage(new Uri("heart_icon.png", UriKind.Relative));
-                Tiles[tileNum].isLiked = true;
+                Data.Tiles[tileNum].isLiked = true;
             }
         }
 
@@ -194,7 +193,56 @@ namespace Hackathon
 
         private void onCreateNewAccount(object sender, MouseButtonEventArgs e)
         {
-            //dayton and brianna do this
+            accountHelper = new CreateAccountHelper(createUserBox.Text, createPassBox.Password, confirmPassBox.Password, emailBox.Text, Data.Users);
+            if(!accountHelper.isAccountValid())
+            {
+                createUserBox.Background = new SolidColorBrush(Color.FromRgb(240, 152, 152));
+                createPassBox.Background = new SolidColorBrush(Color.FromRgb(240, 152, 152));
+                confirmPassBox.Background = new SolidColorBrush(Color.FromRgb(240, 152, 152));
+                emailBox.Background = new SolidColorBrush(Color.FromRgb(240, 152, 152));
+                return;
+            }
+
+            else if (!accountHelper.isValidateUsername())
+            {
+                createUserBox.Clear();
+                createPassBox.Clear();
+                confirmPassBox.Clear();
+                emailBox.Clear();
+                createUserBox.Background = new SolidColorBrush(Color.FromRgb(240, 152, 152));
+                return;
+            }
+            
+            else if (!accountHelper.isValidPassword())
+            {
+                createUserBox.Clear();
+                createPassBox.Clear();
+                confirmPassBox.Clear();
+                emailBox.Clear();
+                createPassBox.Background = new SolidColorBrush(Color.FromRgb(240, 152, 152));
+                confirmPassBox.Background = new SolidColorBrush(Color.FromRgb(240, 152, 152));
+                return;
+            }
+          
+            else if (!accountHelper.isValidateEmail())
+            {
+                createUserBox.Clear();
+                createPassBox.Clear();
+                confirmPassBox.Clear();
+                emailBox.Clear();
+                emailBox.Background = new SolidColorBrush(Color.FromRgb(240, 152, 152));
+                return;
+            }
+            
+            else
+            {
+                Data.Users = accountHelper.AddNewUser();
+                System.Windows.MessageBox.Show("You have successfully created an account", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                CollapseAll();
+                isSignedIn = true;
+                loginButton.Content = "Sign Out";
+                mainScroll.Visibility = Visibility.Visible;
+            }
         }
 
         private void onPasswordEnter(object sender, KeyEventArgs e)
@@ -203,11 +251,64 @@ namespace Hackathon
             {
                 onConfirmLoginButtonClick(sender, EventArgs.Empty);
             }
+            else
+            {
+                passwordBox.Background = new SolidColorBrush(Colors.White);
+            }
         }
 
         private void onLaughClick(object sender, MouseButtonEventArgs e)
         {
             CollapseAll();
+        }
+
+        private void Export()
+        {
+            StreamWriter writer = new StreamWriter("E:\\Steve\\Documents\\visual studio 2015\\Projects\\Hackathon\\Users.txt");
+            foreach (var user in Data.Users)
+            {
+                writer.WriteLine(user.Export());
+            }
+            writer.Close();   
+        }
+        private void Import()
+        {
+            if (File.Exists("E:\\Steve\\Documents\\visual studio 2015\\Projects\\Hackathon\\Users.txt") == true)
+            {
+                StreamReader reader = new StreamReader("E:\\Steve\\Documents\\visual studio 2015\\Projects\\Hackathon\\Users.txt");
+                var line = reader.ReadLine();
+                while (line != null)
+                {
+                    AddUser(line);
+                    line = reader.ReadLine();
+                }
+                reader.Close();
+            }
+        }
+        private void AddUser(string line)
+        {
+            if (line == null)
+            {
+                return;
+            }
+
+            else
+            {
+                string[] user = new string[3];
+                user = line.Split(' ');
+                Data.Users.Add(new UserInfo(user[0], user[1], user[2]));
+            }
+        }
+
+        private void onClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Export();
+        }
+
+        private void onTextInput(object sender, EventArgs e)
+        {
+            var box = (Control)sender;
+            box.Background = new SolidColorBrush(Colors.White);
         }
     }
 }

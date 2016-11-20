@@ -3,6 +3,15 @@ using System;
 
 namespace Hackathon.Core
 {
+    public enum TileType
+    {
+        Featured,
+        Laugh,
+        Smile,
+        Aww,
+        Hungry
+    }
+
     public class Tile
     {
         public BitmapImage Image { get; set; }
